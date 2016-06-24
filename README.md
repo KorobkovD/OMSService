@@ -24,7 +24,7 @@ Order Management System service.
 ```
 {
 "order_id":"25",
-"status":"payed",
+"status":"assigned",
 "worker_id":"2"
 }
 ```
