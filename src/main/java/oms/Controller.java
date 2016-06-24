@@ -55,7 +55,7 @@ public class Controller {
                 e.printStackTrace();
             }
         }
-        else if (order.getStatus().equals("assigned")) {
+        else if (order.getStatus().equals("assigned") | order.getStatus().equals("canceled")) {
 
             String sql = "select status from orders where id = " + order.getOrder_id();
             String oStatus = "";
