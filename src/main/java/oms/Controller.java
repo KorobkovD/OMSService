@@ -47,7 +47,6 @@ public class Controller {
             String sql = "insert into orders (id, description, status, empid) values (" + order.getOrder_id() +
                     ", 'order_" + order.getOrder_id() + "', '" + order.getStatus() + "', 1)";
             try {
-                //Connection connect = DBConnection.connect();
                 connect.createStatement().execute(sql);
                 System.out.println("New order has been inserted into DB: " +
                         order.getOrder_id() + " - " + order.getStatus());
@@ -55,7 +54,7 @@ public class Controller {
                 e.printStackTrace();
             }
         }
-        else if (order.getStatus().equals("assigned") | order.getStatus().equals("canceled")) {
+        else {
 
             String sql = "select status from orders where id = " + order.getOrder_id();
             String oStatus = "";
@@ -66,14 +65,19 @@ public class Controller {
                     oStatus = rs.getString(1);
             } catch (Exception ex) {
             }
+            boolean b = oStatus.equals("");
 
-            if (!oStatus.equals(order.getStatus())) {
-                sql = "update orders set empid = '" + order.getWorker_id() + "', status = '" + order.getStatus() + "' " +
-                        "where id = " + order.getOrder_id() + " and status = 'payed'";
+            if (!oStatus.equals(order.getStatus()) & !b) {
+                if (order.getStatus().equals("assigned"))
+                    sql = "update orders set empid = '" + order.getWorker_id() + "', status = '" + order.getStatus() + "' " +
+                        "where id = " + order.getOrder_id();
+                else
+                    sql = "update orders set status = '" + order.getStatus() + "' " + "where id = " + order.getOrder_id();
+
                 try {
-                    //Connection connect = DBConnection.connect();
                     connect.createStatement().execute(sql);
-                    System.out.println("The order has been updated in DB");
+                    System.out.println("The order has been updated in DB: " +
+                            order.getOrder_id() + " - " + order.getStatus());
 
                     JSONObject json = new JSONObject();
                     json.put("order_id", Integer.toString(order.getOrder_id()));
